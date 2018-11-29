@@ -27,7 +27,7 @@ then
   add-apt-repository "deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
   # Step 3: 更新并安装 Docker-CE
   apt update
-  apt install docker-ce=18.06.1~ce~3-0~ubuntu
+  apt install -y docker-ce=18.06.1~ce~3-0~ubuntu
   echo "installed docker"
 fi
 
@@ -42,7 +42,7 @@ then
 deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
 EOF
   apt update
-  apt install kubelet kubeadm kubectl
+  apt install -y kubelet kubeadm kubectl
   echo "installed kubernetes tools"
 fi
 
@@ -60,8 +60,6 @@ then
     #echo "${key}=${value}"
     if [[ -z `docker images | grep ${key%:*}` ]]
     then
-      echo ${key}
-      echo `docker images | grep ${key%:*}`
       docker pull ${value}
       docker tag ${value} ${key}
       docker rmi ${value}
