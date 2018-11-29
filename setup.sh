@@ -28,7 +28,7 @@ apt install docker-ce
 ## 安装
 apt update
 # step 1: 安装docker的GPG证书
-curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
+curl -fsSL https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
 cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
 deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
 EOF
@@ -36,6 +36,7 @@ apt update
 apt install kubelet kubeadm kubectl
 
 ## docker 拉取kubernetes的镜像
+curl -fsSL -O https://raw.githubusercontent.com/jackyleefu/k8s-ubuntu-setup/master/k8s-mirrors
 file="k8s-mirrors"
 
 if [ -f "$file" ]
