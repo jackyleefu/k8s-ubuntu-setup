@@ -23,7 +23,7 @@ curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key a
 add-apt-repository "deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
 # Step 3: 更新并安装 Docker-CE
 apt update
-apt install docker-ce
+apt install docker-ce=18.06.1~ce~3-0~ubuntu
 
 ## 安装
 apt update
