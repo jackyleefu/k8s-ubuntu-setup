@@ -3,19 +3,21 @@ cd ~
 
 if [[ ! -f ~/.ssh/authorized_keys ]]
 then
+  echo "creating authorized_keys file"
   if [[ ! -d ~/.ssh ]]
   then
     mkdir .ssh
   fi
   touch ~/.ssh/authorized_keys
+  echo "created authorized_keys file"
 fi
 
+echo "downloading ssh pub"
 curl -fsSL https://github.com/jackyleefu.keys >>~/.ssh/authorized_keys
-
-## 禁用swap
-swapoff -a
+echo "downloaded ssh pub"
 
 ## 安装docker
+echo "installing docker"
 apt update
 # step 1: 安装docker的GPG证书
 curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
@@ -24,8 +26,10 @@ add-apt-repository "deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/u
 # Step 3: 更新并安装 Docker-CE
 apt update
 apt install docker-ce=18.06.1~ce~3-0~ubuntu
+echo "installed docker"
 
 ## 安装
+echo "installing kubernetes tools"
 apt update
 # step 1: 安装docker的GPG证书
 curl -fsSL https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
@@ -34,8 +38,10 @@ deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
 EOF
 apt update
 apt install kubelet kubeadm kubectl
+echo "installed kubernetes tools"
 
 ## docker 拉取kubernetes的镜像
+echo "installing kubernetes images"
 curl -fsSL -O https://raw.githubusercontent.com/jackyleefu/k8s-ubuntu-setup/master/k8s-mirrors
 file="k8s-mirrors"
 
@@ -54,3 +60,4 @@ then
 else
   echo "$file not found."
 fi
+echo "installed kubernetes images"
