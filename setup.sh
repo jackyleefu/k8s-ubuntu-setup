@@ -1,6 +1,5 @@
 #! /bin/bash
 
-sudo passwd
 su
 cd ~
 
