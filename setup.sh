@@ -1,1 +1,39 @@
 #! /bin/bash
+
+sudo passwd
+su
+cd ~
+
+if [[! -f ~/.ssh/authorized_keys]]
+then
+  if [[ ! -d ~/.ssh]]
+  then
+    mkdir .ssh
+  fi
+  touch ~/.ssh/authorized_keys
+fi
+
+curl -fsSL https://github.com/jackyleefu.keys >>~/.ssh/authorized_keys
+
+## 禁用swap
+swapoff -a
+
+## 安装docker
+apt update
+# step 1: 安装docker的GPG证书
+curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
+# Step 2: 写入软件源信息
+add-apt-repository "deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
+# Step 3: 更新并安装 Docker-CE
+apt update
+apt install docker-ce
+
+## 安装
+apt update
+# step 1: 安装docker的GPG证书
+curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
+cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
+EOF
+apt update
+apt install kubelet kubeadm kubectl
