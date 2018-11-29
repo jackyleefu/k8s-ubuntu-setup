@@ -58,7 +58,7 @@ then
   cat "$file" | while IFS='=' read -r key value
   do
     #echo "${key}=${value}"
-    if [[ -z `docker images | grep ${key}` ]]
+    if [[ -z `docker images` | grep ${key} ]]
     then
       docker pull ${value}
       docker tag ${value} ${key}
