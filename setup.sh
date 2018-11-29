@@ -60,6 +60,7 @@ then
     #echo "${key}=${value}"
     if [[ -z `docker images | grep ${key}` ]]
     then
+      echo `docker images | grep ${key}`
       docker pull ${value}
       docker tag ${value} ${key}
       docker rmi ${value}
