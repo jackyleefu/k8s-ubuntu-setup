@@ -1,9 +1,9 @@
 #! /bin/bash
 cd ~
 
-if [[! -f ~/.ssh/authorized_keys]]
+if [[ ! -f ~/.ssh/authorized_keys ]]
 then
-  if [[ ! -d ~/.ssh]]
+  if [[ ! -d ~/.ssh ]]
   then
     mkdir .ssh
   fi
