@@ -1,6 +1,4 @@
 #! /bin/bash
-
-su
 cd ~
 
 if [[! -f ~/.ssh/authorized_keys]]
