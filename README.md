@@ -1,6 +1,9 @@
 # k8s-ubuntu-setup
 1. root Login
 2. static IP
+
+        # vi /etc/netplan/*.yaml
+        # netplan apply
 3. disable swap
 
     1. swap off
