@@ -17,28 +17,34 @@ curl -fsSL https://github.com/jackyleefu.keys >>~/.ssh/authorized_keys
 echo "downloaded ssh pub"
 
 ## 安装docker
-echo "installing docker"
-apt update
-# step 1: 安装docker的GPG证书
-curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
-# Step 2: 写入软件源信息
-add-apt-repository "deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
-# Step 3: 更新并安装 Docker-CE
-apt update
-apt install docker-ce=18.06.1~ce~3-0~ubuntu
-echo "installed docker"
+if [[ -z `which docker` ]]
+then 
+  echo "installing docker"
+  apt update
+  # step 1: 安装docker的GPG证书
+  curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
+  # Step 2: 写入软件源信息
+  add-apt-repository "deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
+  # Step 3: 更新并安装 Docker-CE
+  apt update
+  apt install docker-ce=18.06.1~ce~3-0~ubuntu
+  echo "installed docker"
+fi
 
 ## 安装
-echo "installing kubernetes tools"
-apt update
-# step 1: 安装docker的GPG证书
-curl -fsSL https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
-cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+if [[ -z `which kubeadm)` ]]
+then 
+  echo "installing kubernetes tools"
+  apt update
+  # step 1: 安装docker的GPG证书
+  curl -fsSL https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
+  cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
 deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
 EOF
-apt update
-apt install kubelet kubeadm kubectl
-echo "installed kubernetes tools"
+  apt update
+  apt install kubelet kubeadm kubectl
+  echo "installed kubernetes tools"
+fi
 
 ## docker 拉取kubernetes的镜像
 echo "installing kubernetes images"
@@ -52,9 +58,12 @@ then
   cat "$file" | while IFS='=' read -r key value
   do
     #echo "${key}=${value}"
-    docker pull ${value}
-    docker tag ${value} ${key}
-    docker rmi ${value}
+    if [[ -z `docker images | grep ${key}` ]]
+    then
+      docker pull ${value}
+      docker tag ${value} ${key}
+      docker rmi ${value}
+    fi
   done
 
 else
