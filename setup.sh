@@ -36,7 +36,7 @@ apt update
 apt install kubelet kubeadm kubectl
 
 ## docker 拉取kubernetes的镜像
-file="mirrors"
+file="k8s-mirrors"
 
 if [ -f "$file" ]
 then
