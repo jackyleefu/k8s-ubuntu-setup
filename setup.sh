@@ -34,3 +34,22 @@ deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
 EOF
 apt update
 apt install kubelet kubeadm kubectl
+
+## docker 拉取kubernetes的镜像
+file="mirrors"
+
+if [ -f "$file" ]
+then
+  echo "$file found."
+
+  cat "$file" | while IFS='=' read -r key value
+  do
+    #echo "${key}=${value}"
+    docker pull ${value}
+    docker tag ${value} ${key}
+    docker rmi ${value}
+  done
+
+else
+  echo "$file not found."
+fi
