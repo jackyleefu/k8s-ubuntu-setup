@@ -32,7 +32,7 @@ then
 fi
 
 ## 安装
-if [[ -z `which kubeadm)` ]]
+if [[ -z `which kubeadm` ]]
 then 
   echo "installing kubernetes tools"
   apt update
