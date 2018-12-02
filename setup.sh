@@ -1,7 +1,7 @@
 #! /bin/bash
 
 ## 设置静态IP
-sed -i "s/[]/[192.168.0.50/24]/g" /etc/netplan/50-cloud-init.yaml
+sed -i 's/\[\]/\[192.168.0.50\/24\]/g' /etc/netplan/50-cloud-init.yaml
 netplan apply
 ## 禁用防火墙
 #systemctl stop firewalld
@@ -19,7 +19,7 @@ swapoff -a
 echo "net.ipv4.ip_forward = 1" >>/etc/sysctl.conf
 
 ## 阻止DNS回路
-sed -i "s/#DNS=/#DNS=114.114.114.114/g" /etc/systemd/resolved.conf
+sed -i 's/#DNS=/DNS=114.114.114.114/g' /etc/systemd/resolved.conf
 
 ## 安装docker
 if [[ -z `which docker` ]]
