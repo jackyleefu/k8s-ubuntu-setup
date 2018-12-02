@@ -1,6 +1,7 @@
 #! /bin/bash
 
 ## 设置静态IP
+echo "$1"
 sed -i "s/\[\]/\[192\.168\.0\.${1:-50}\/24\]/g" /etc/netplan/50-cloud-init.yaml
 netplan apply
 
