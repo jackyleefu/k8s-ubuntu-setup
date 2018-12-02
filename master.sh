@@ -1,7 +1,7 @@
 ## docker 提前从gcr的国内仓库里拉取kubernetes的核心image, 并修改为原image的tag
 echo "installing kubernetes images"
-curl -fsSL -O https://raw.githubusercontent.com/jackyleefu/k8s-ubuntu-setup/master/k8s-mirrors
-file="k8s-mirrors"
+curl -fsSL -O https://raw.githubusercontent.com/jackyleefu/k8s-ubuntu-setup/master/k8s-master-images
+file="k8s-master-images"
 
 if [ -f "$file" ]
 then
