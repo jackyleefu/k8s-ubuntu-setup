@@ -1,29 +1,25 @@
 #! /bin/bash
 
-if [[ `whoami` != 'root']]
-then
-  echo 'must switch to root'
-  exit 1
-fi
+## 设置静态IP
+sed -i "s/[]/[192.168.0.50/24]/g" /etc/netplan/50-cloud-init.yaml
+netplan apply
+## 禁用防火墙
+#systemctl stop firewalld
+#systemctl disable firewalld
 
-cd $HOME
+## 禁用selinux
+#setenforce 0
+#sed -i "s///g" /etc/selinux/config
 
-## 启用net.ipv4.ip_forward
+## 禁用内存交换
+swapoff -a
+#sed -i "s/\/swap.img/#\/swap.img/g" /etc/fstab
+
+## 启用ip_forward
 echo "net.ipv4.ip_forward = 1" >>/etc/sysctl.conf
 
-## 从github的用户中下载SSH客户端的公钥
-echo "downloading ssh pub"
-if [[ ! -f ~/.ssh/authorized_keys ]]
-then
-  if [[ ! -d ~/.ssh ]]
-  then
-    mkdir .ssh
-  fi
-  touch ~/.ssh/authorized_keys
-fi
-
-sudo -s "curl -fsSL https://github.com/jackyleefu.keys >>$HOME/.ssh/authorized_keys"
-echo "downloaded ssh pub"
+## 阻止DNS回路
+sed -i "s/#DNS=/#DNS=114.114.114.114/g" /etc/systemd/resolved.conf
 
 ## 安装docker
 if [[ -z `which docker` ]]
@@ -55,7 +51,7 @@ EOF
   echo "installed kubernetes tools"
 fi
 
-## docker 提前从gcr的国内镜像里拉取kubernetes的核心image, 并修改为原image的tag
+## docker 提前从gcr的国内仓库里拉取kubernetes的核心image, 并修改为原image的tag
 echo "installing kubernetes images"
 curl -fsSL -O https://raw.githubusercontent.com/jackyleefu/k8s-ubuntu-setup/master/k8s-mirrors
 file="k8s-mirrors"
