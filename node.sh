@@ -12,9 +12,9 @@ then
     #echo "${key}=${value}"
     if [[ -z `docker images | grep ${key%:*}` ]]
     then
-      docker pull ${value}
-      docker tag ${value} ${key}
-      docker rmi ${value}
+      sudo docker pull ${value}
+      sudo docker tag ${value} ${key}
+      sudo docker rmi ${value}
     fi
   done
 
