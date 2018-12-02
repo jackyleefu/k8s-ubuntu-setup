@@ -10,7 +10,7 @@
 
 ## 禁用内存交换
 sudo swapoff -a
-sudo sed -i "s/\/swap\.img/#\/swap\.img/g" /etc/fstab
+sudo sed -i "s/^\/swap\.img/#\/swap\.img/g" /etc/fstab
 
 ## 启用ip_forward
 sudo sysctl -wq net.ipv4.ip_forward=1
