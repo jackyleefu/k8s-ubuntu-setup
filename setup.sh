@@ -1,7 +1,7 @@
 #! /bin/bash
 
 ## 设置静态IP
-sed -i 's/\[\]/\[192.168.0.50\/24\]/g' /etc/netplan/50-cloud-init.yaml
+sed -i 's/\[\]/\[192\.168\.0\.50\/24\]/g' /etc/netplan/50-cloud-init.yaml
 netplan apply
 ## 禁用防火墙
 #systemctl stop firewalld
