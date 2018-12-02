@@ -14,4 +14,4 @@
             # vi /etc/fstab
 4. exec:  
 
-        # bash -c "$(curl -fsSL https://raw.githubusercontent.com/jackyleefu/k8s-ubuntu-setup/master/setup.sh)"
+        $ sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/jackyleefu/k8s-ubuntu-setup/master/setup.sh)"
