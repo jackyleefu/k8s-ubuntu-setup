@@ -1,16 +1,5 @@
 #! /bin/bash
 
-## 设置静态IP
-if [[ -z $1 ]]
-then
-  echo "No IP specified"
-  exit 1
-fi
-
-export ip=$(echo "$1" | sed 's/\./\\\./g' | sed 's/\//\\\//g')
-sudo sed -i "s/\[\]/\[${ip}\]/g" /etc/netplan/50-cloud-init.yaml
-sudo netplan apply
-
 ## 禁用防火墙
 #sudo systemctl stop firewalld
 #sudo systemctl disable firewalld
