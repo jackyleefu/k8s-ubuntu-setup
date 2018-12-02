@@ -1,8 +1,14 @@
 #! /bin/bash
 
 ## 设置静态IP
-echo "$1"
-sed -i "s/\[\]/\[192\.168\.0\.${1:-50}\/24\]/g" /etc/netplan/50-cloud-init.yaml
+if [[ -z $1 ]]
+then
+  echo "No IP specified"
+  exit 1
+fi
+
+ip=echo "$1" | sed 's/\./\\\./g' | sed 's/\//\\\//g'
+sed -i "s/\[\]/${ip}/g" /etc/netplan/50-cloud-init.yaml
 netplan apply
 
 ## 禁用防火墙
