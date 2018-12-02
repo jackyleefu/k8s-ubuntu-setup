@@ -1,4 +1,4 @@
-# k8s kubeadm for ubuntu 18.04 setup
+# k8s v1.12.3 kubeadm for ubuntu 18.04 setup
 every node:  
 
     $ sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/jackyleefu/k8s-ubuntu-setup/master/prepare.sh)"
