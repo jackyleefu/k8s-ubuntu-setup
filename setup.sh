@@ -1,19 +1,28 @@
 #! /bin/bash
-cd ~
 
+if [[ `whoami` != 'root']]
+then
+  echo 'must switch to root'
+  exit 1
+fi
+
+cd $HOME
+
+## 启用net.ipv4.ip_forward
+echo "net.ipv4.ip_forward = 1" >>/etc/sysctl.conf
+
+## 从github的用户中下载SSH客户端的公钥
+echo "downloading ssh pub"
 if [[ ! -f ~/.ssh/authorized_keys ]]
 then
-  echo "creating authorized_keys file"
   if [[ ! -d ~/.ssh ]]
   then
     mkdir .ssh
   fi
   touch ~/.ssh/authorized_keys
-  echo "created authorized_keys file"
 fi
 
-echo "downloading ssh pub"
-curl -fsSL https://github.com/jackyleefu.keys >>~/.ssh/authorized_keys
+sudo -s "curl -fsSL https://github.com/jackyleefu.keys >>$HOME/.ssh/authorized_keys"
 echo "downloaded ssh pub"
 
 ## 安装docker
@@ -31,7 +40,7 @@ then
   echo "installed docker"
 fi
 
-## 安装
+## 安装 kubelet kubeadm kubectl
 if [[ -z `which kubeadm` ]]
 then 
   echo "installing kubernetes tools"
@@ -46,7 +55,7 @@ EOF
   echo "installed kubernetes tools"
 fi
 
-## docker 拉取kubernetes的镜像
+## docker 提前从gcr的国内镜像里拉取kubernetes的核心image, 并修改为原image的tag
 echo "installing kubernetes images"
 curl -fsSL -O https://raw.githubusercontent.com/jackyleefu/k8s-ubuntu-setup/master/k8s-mirrors
 file="k8s-mirrors"
