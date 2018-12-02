@@ -42,9 +42,7 @@ then
   sudo apt update
   # step 1: 安装docker的GPG证书
   curl -fsSL https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
-  sudo su -c "cat <<EOF
-    deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
-    EOF >/etc/apt/sources.list.d/kubernetes.list"
+  sudo su -c "echo 'deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main' >/etc/apt/sources.list.d/kubernetes.list"
   sudo apt update
   sudo apt install -y kubelet kubeadm kubectl
   echo "installed kubernetes tools"
