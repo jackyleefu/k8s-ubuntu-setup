@@ -7,7 +7,7 @@ then
   exit 1
 fi
 
-ip=$(echo "$1" | sed 's/\./\\\./g' | sed 's/\//\\\//g')
+export ip=$(echo "$1" | sed 's/\./\\\./g' | sed 's/\//\\\//g')
 sudo sed -i "s/\[\]/\[${ip}\]/g" /etc/netplan/50-cloud-init.yaml
 sudo netplan apply
 
