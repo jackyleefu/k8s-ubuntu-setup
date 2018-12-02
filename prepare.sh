@@ -17,7 +17,7 @@ sudo sysctl -wq net.ipv4.ip_forward=1
 sudo su -c "echo 'net.ipv4.ip_forward = 1' >>/etc/sysctl.conf"
 
 ## 阻止DNS回路
-sudo sed -i 's/#DNS=/DNS=114\.114\.114\.114/g' /etc/systemd/resolved.conf
+sudo sed -i 's/^#DNS=/DNS=114\.114\.114\.114/g' /etc/systemd/resolved.conf
 sudo systemctl restart systemd-resolved
 
 ## 安装docker
