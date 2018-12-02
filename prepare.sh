@@ -8,7 +8,7 @@ then
 fi
 
 ip=$(echo "$1" | sed 's/\./\\\./g' | sed 's/\//\\\//g')
-sed -i "s/\[\]/${ip}/g" /etc/netplan/50-cloud-init.yaml
+sed -i "s/\[\]/\[${ip}\]/g" /etc/netplan/50-cloud-init.yaml
 netplan apply
 
 ## 禁用防火墙
