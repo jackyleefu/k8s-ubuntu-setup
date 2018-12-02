@@ -13,13 +13,13 @@ netplan apply
 
 ## 禁用内存交换
 swapoff -a
-sed -i "s/\/swap.img/#\/swap.img/g" /etc/fstab
+sed -i "s/\/swap\.img/#\/swap\.img/g" /etc/fstab
 
 ## 启用ip_forward
 echo "net.ipv4.ip_forward = 1" >>/etc/sysctl.conf
 
 ## 阻止DNS回路
-sed -i 's/^.*DNS=.*$/DNS=114\.114\.114\.114/g' /etc/systemd/resolved.conf
+sed -i 's/^#DNS=.*$/DNS=114\.114\.114\.114/g' /etc/systemd/resolved.conf
 
 ## 安装docker
 if [[ -z `which docker` ]]
