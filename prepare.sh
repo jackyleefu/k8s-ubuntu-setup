@@ -23,7 +23,7 @@ sudo systemctl restart systemd-resolved
 ## 安装docker
 if [[ -z `which docker` ]]
 then 
-  echo "installing docker"
+  echo "################## installing docker"
   sudo apt update
   # step 1: 安装docker的GPG证书
   curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
@@ -32,13 +32,13 @@ then
   # Step 3: 更新并安装 Docker-CE
   sudo apt update
   sudo apt install -y docker-ce=18.06.1~ce~3-0~ubuntu
-  echo "installed docker"
+  echo "installed docker ##################"
 fi
 
 ## 安装 kubelet kubeadm kubectl
 if [[ -z `which kubeadm` ]]
 then 
-  echo "installing kubernetes tools"
+  echo "################## installing kubernetes tools"
   sudo apt update
   # step 1: 安装docker的GPG证书
   curl -fsSL https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
@@ -48,5 +48,5 @@ EOF
 "
   sudo apt update
   sudo apt install -y kubelet kubeadm kubectl
-  echo "installed kubernetes tools"
+  echo "installed kubernetes tools ##################"
 fi
