@@ -1,0 +1,131 @@
+kind: Secret
+apiVersion: v1
+metadata:
+  name: pg-password
+  labels: 
+    app: pg
+type: Opaque
+data:
+  password: MTEyMjMz
+---
+# Headless service for stable DNS entries of StatefulSet members.
+kind: Service
+apiVersion: v1
+metadata:
+  name: pg
+  labels:
+    app: pg
+spec:
+  clusterIP: None
+  ports:
+    - name: pg
+      port: 5432
+  selector:
+    app: pg
+---
+# Client service for connecting to any pg instance for reads.
+# For writes, you must instead connect to the master: pg-0.pg.
+kind: Service
+apiVersion: v1
+metadata:
+  name: pg-read
+  labels:
+    app: pg
+spec:
+  ports:
+    - name: pg
+      port: 5432
+  selector:
+    app: pg
+---
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: pg
+spec:
+  selector:
+    matchLabels:
+      app: pg
+  serviceName: pg
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: pg
+    spec:
+      volumes:
+        - name: conf
+          emptyDir: {}
+      initContainers:
+        - name: init-pg
+          image: postgres:11.1-alpine
+          command:
+            - bash
+            - "-c"
+            - |
+              set -e
+              # Generate clone data from previous peer.
+              [[ `hostname` =~ -([0-9]+)$ ]] || exit 1
+              ordinal=${BASH_REMATCH[1]}
+              # enable cluster connect
+              cat <<EOF >/mnt/conf.d/my_hba.sh
+              echo 'host replication postgres .pg md5' > /var/lib/postgresql/data/pg_hba.conf
+              EOF
+              [[ $ordinal -eq 0 ]] && exit 0
+              # If there is an PG_VERSION file and at least one line, initdb will not be executed
+              echo "$(pg_ctl --version)" > /var/lib/postgresql/data/PG_VERSION
+              # Generate clone data from previous peer.
+              pg_basebackup -h pg-$(($ordinal-1)).pg -U postgres -D /var/lib/postgresql/data -R
+          volumeMounts:
+            - name: conf
+              mountPath: /mnt/conf.d
+            - name: data
+              subPath: pgdata
+              mountPath: /var/lib/postgresql/data
+      containers:
+        - name: pg
+          image: postgres:11.1-alpine
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-password
+                  key: password
+          ports:
+            - name: pg
+              containerPort: 5432
+          volumeMounts:
+            - name: conf
+              mountPath: /docker-entrypoint-initdb.d
+            - name: data
+              subPath: pgdata
+              mountPath: /var/lib/postgresql/data
+          livenessProbe:
+            exec:
+              command:
+                - bash
+                - "-c"
+                - |
+                  pg_ctl status
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            exec:
+              # Check we can execute queries over TCP (skip-networking is off).
+              command:
+                - bash
+                - "-c"
+                - |
+                  psql --password $POSTGRES_PASSWORD -c "SELECT 1"
+            initialDelaySeconds: 5
+            periodSeconds: 2
+            timeoutSeconds: 1
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi
