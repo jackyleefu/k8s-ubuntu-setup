@@ -164,27 +164,27 @@ spec:
             - name: data
               subPath: pgdata
               mountPath: /var/lib/postgresql/data
-          livenessProbe:
-            exec:
-              command:
-                - bash
-                - "-c"
-                - |
-                  pg_isready
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 5
-          readinessProbe:
-            exec:
-              # Check we can execute queries over TCP (skip-networking is off).
-              command:
-                - bash
-                - "-c"
-                - |
-                  psql --no-password -c "SELECT 1"
-            initialDelaySeconds: 5
-            periodSeconds: 2
-            timeoutSeconds: 1
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #       - bash
+          #       - "-c"
+          #       - |
+          #         pg_isready
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 10
+          #   timeoutSeconds: 5
+          # readinessProbe:
+          #   exec:
+          #     # Check we can execute queries over TCP (skip-networking is off).
+          #     command:
+          #       - bash
+          #       - "-c"
+          #       - |
+          #         psql --no-password -c "SELECT 1"
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 2
+          #   timeoutSeconds: 1
   volumeClaimTemplates:
     - metadata:
         name: data
