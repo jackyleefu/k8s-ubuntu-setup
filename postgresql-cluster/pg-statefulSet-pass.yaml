@@ -18,14 +18,14 @@ spec:
   storageClassName: local-storage
   local:
     path: /mnt/disks/vol1
-  # nodeAffinity:
-  #   required:
-  #     nodeSelectorTerms:
-  #     - matchExpressions:
-  #       - key: kubernetes.io/hostname
-  #         operator: In
-  #         values:
-  #         - k8s-node
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - k8s-node
 ---
 kind: Secret
 apiVersion: v1
@@ -76,7 +76,7 @@ spec:
     matchLabels:
       app: pg
   serviceName: pg
-  replicas: 3
+  replicas: 2
   template:
     metadata:
       labels:
