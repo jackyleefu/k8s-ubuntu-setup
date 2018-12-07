@@ -46,6 +46,6 @@ then
 deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
 EOF"
   sudo apt update
-  sudo apt install -y kubelet kubeadm kubectl
+  sudo apt install -y kubelet=1.12.3-00 kubeadm=1.12.3-00 kubectl=1.12.3-00
   echo "installed kubernetes tools ##################"
 fi
