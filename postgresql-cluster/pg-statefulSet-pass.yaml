@@ -125,9 +125,11 @@ spec:
               [[ `hostname` =~ -([0-9]+)$ ]] || exit 1
               ordinal=${BASH_REMATCH[1]}
               # enable cluster connect
-              # cat <<EOF >/mnt/conf.d/my_hba.sh
-              # echo 'host replication postgres .pg md5' >> /var/lib/postgresql/data/pg_hba.conf
-              # EOF
+              cat <<EOF >/mnt/conf.d/my_hba.sh
+              cat /var/lib/postgresql/data/pg_hba.conf
+              echo 'host replication postgres 10.244.0.0/16 md5' >> /var/lib/postgresql/data/pg_hba.conf
+              cat /var/lib/postgresql/data/pg_hba.conf
+              EOF
               [[ $ordinal -eq 0 ]] && exit 0
               # If there is an PG_VERSION file and at least one line, initdb will not be executed
               echo "$(pg_ctl --version)" > /var/lib/postgresql/data/PG_VERSION
@@ -168,8 +170,7 @@ spec:
                 - bash
                 - "-c"
                 - |
-                  su - postgres
-                  pg_ctl status
+                  pg_isready
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
@@ -180,7 +181,6 @@ spec:
                 - bash
                 - "-c"
                 - |
-                  su - postgres
                   psql --no-password -c "SELECT 1"
             initialDelaySeconds: 5
             periodSeconds: 2
