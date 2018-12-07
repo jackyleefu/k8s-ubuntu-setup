@@ -5,8 +5,8 @@ metadata:
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
 ---
-apiVersion: v1
 kind: PersistentVolume
+apiVersion: v1
 metadata:
   name: local-pv
 spec:
@@ -18,14 +18,14 @@ spec:
   storageClassName: local-storage
   local:
     path: /mnt/disks/vol1
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kubernetes.io/hostname
-          operator: In
-          values:
-          - k8s-node
+  # nodeAffinity:
+  #   required:
+  #     nodeSelectorTerms:
+  #     - matchExpressions:
+  #       - key: kubernetes.io/hostname
+  #         operator: In
+  #         values:
+  #         - k8s-node
 ---
 kind: Secret
 apiVersion: v1
