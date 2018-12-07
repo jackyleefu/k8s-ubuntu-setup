@@ -136,6 +136,7 @@ spec:
                 - bash
                 - "-c"
                 - |
+                  su - postgres
                   pg_ctl status
             initialDelaySeconds: 30
             periodSeconds: 10
@@ -147,7 +148,8 @@ spec:
                 - bash
                 - "-c"
                 - |
-                  psql --password $POSTGRES_PASSWORD -c "SELECT 1"
+                  su - postgres
+                  psql -c "SELECT 1"
             initialDelaySeconds: 5
             periodSeconds: 2
             timeoutSeconds: 1
