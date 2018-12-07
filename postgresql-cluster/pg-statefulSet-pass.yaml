@@ -25,7 +25,8 @@ spec:
         - key: kubernetes.io/hostname
           operator: In
           values:
-          - k8s-node
+          - k8s-node1
+          - k8s-node2
 ---
 kind: Secret
 apiVersion: v1
