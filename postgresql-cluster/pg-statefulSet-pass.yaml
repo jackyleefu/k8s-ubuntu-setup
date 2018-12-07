@@ -110,6 +110,12 @@ spec:
       initContainers:
         - name: init-pg
           image: postgres:11.1-alpine
+          env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-password
+                  key: password
           command:
             - bash
             - "-c"
@@ -126,7 +132,7 @@ spec:
               # If there is an PG_VERSION file and at least one line, initdb will not be executed
               echo "$(pg_ctl --version)" > /var/lib/postgresql/data/PG_VERSION
               # Generate clone data from previous peer.
-              pg_basebackup -h pg-$(($ordinal-1)).pg -U postgres -D /var/lib/postgresql/data -R
+              pg_basebackup -h pg-$(($ordinal-1)).pg -U postgres --no-password -D /var/lib/postgresql/data -R
           volumeMounts:
             - name: conf
               mountPath: /mnt/conf.d
@@ -156,29 +162,29 @@ spec:
             - name: data
               subPath: pgdata
               mountPath: /var/lib/postgresql/data
-          # livenessProbe:
-          #   exec:
-          #     command:
-          #       - bash
-          #       - "-c"
-          #       - |
-          #         su - postgres
-          #         pg_ctl status
-          #   initialDelaySeconds: 30
-          #   periodSeconds: 10
-          #   timeoutSeconds: 5
-          # readinessProbe:
-          #   exec:
-          #     # Check we can execute queries over TCP (skip-networking is off).
-          #     command:
-          #       - bash
-          #       - "-c"
-          #       - |
-          #         su - postgres
-          #         psql --no-password -c "SELECT 1"
-          #   initialDelaySeconds: 5
-          #   periodSeconds: 2
-          #   timeoutSeconds: 1
+          livenessProbe:
+            exec:
+              command:
+                - bash
+                - "-c"
+                - |
+                  su - postgres
+                  pg_ctl status
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            exec:
+              # Check we can execute queries over TCP (skip-networking is off).
+              command:
+                - bash
+                - "-c"
+                - |
+                  su - postgres
+                  psql --no-password -c "SELECT 1"
+            initialDelaySeconds: 5
+            periodSeconds: 2
+            timeoutSeconds: 1
   volumeClaimTemplates:
     - metadata:
         name: data
