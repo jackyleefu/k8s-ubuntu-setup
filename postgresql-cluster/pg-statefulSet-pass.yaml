@@ -133,7 +133,6 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
-        lable: pg
       spec:
         accessModes: ["ReadWriteOnce"]
         resources:
