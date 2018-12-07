@@ -142,7 +142,7 @@ spec:
               # If there is an PG_VERSION file and at least one line, initdb will not be executed
               echo "$(pg_ctl --version)" > /var/lib/postgresql/data/PG_VERSION
               # Generate clone data from previous peer.
-              pg_basebackup -h pg-$(($ordinal-1)).pg -U postgres --no-password -D /var/lib/postgresql/data -R
+              # pg_basebackup -h pg-$(($ordinal-1)).pg -U postgres --no-password -D /var/lib/postgresql/data -R
 
           volumeMounts:
             - name: conf
