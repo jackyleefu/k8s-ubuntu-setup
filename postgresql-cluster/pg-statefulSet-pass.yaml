@@ -17,7 +17,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: local-storage
   local:
-    path: /mnt/disks/vol1
+    path: /tmp/disk/vol1
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -25,7 +25,8 @@ spec:
         - key: kubernetes.io/hostname
           operator: In
           values:
-          - k8s-master
+          - k8s-node1
+          - k8s-node2
 ---
 kind: Secret
 apiVersion: v1
