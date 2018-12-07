@@ -134,12 +134,14 @@ spec:
                 echo 'PGDATA not empty'
                 exit 1
               fi
+              ls /var/lib/postgresql/data
               chown -R postgres:postgres /var/lib/postgresql/data
               chmod 700 /var/lib/postgresql/data
               su - postgres
               echo "pg-$(($ordinal-1)).pg:5432:replication:postgres:112233" > .pgpass
               chmod 600 .pgpass
               # If there is an PG_VERSION file and at least one line, initdb will not be executed
+              echo "$(pg_ctl --version)" 
               echo "$(pg_ctl --version)" > /var/lib/postgresql/data/PG_VERSION
               # Generate clone data from previous peer.
               # pg_basebackup -h pg-$(($ordinal-1)).pg -U postgres --no-password -D /var/lib/postgresql/data -R
