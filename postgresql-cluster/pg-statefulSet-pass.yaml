@@ -130,11 +130,17 @@ spec:
               echo 'host replication postgres 10.244.0.0/16 md5' >> /var/lib/postgresql/data/pg_hba.conf
               EOF
               [[ $ordinal -eq 0 ]] && exit 0
+              if [[ $(ls -A /var/lib/postgresql/data) != "" ]]; then 
+                echo 'PGDATA not empty'
+                exit 1
+              fi
+              chown -R postgres:postgres /var/lib/postgresql/data
+              chmod 700 /var/lib/postgresql/data
               # If there is an PG_VERSION file and at least one line, initdb will not be executed
-              su - postgres
               echo "$(pg_ctl --version)" > /var/lib/postgresql/data/PG_VERSION
               # Generate clone data from previous peer.
               pg_basebackup -h pg-$(($ordinal-1)).pg -U postgres --no-password -D /var/lib/postgresql/data -R
+
           volumeMounts:
             - name: conf
               mountPath: /mnt/conf.d
