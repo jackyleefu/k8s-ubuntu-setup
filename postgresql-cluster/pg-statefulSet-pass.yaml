@@ -140,6 +140,7 @@ spec:
               su - postgres
               echo "pg-$(($ordinal-1)).pg:5432:replication:postgres:112233" > .pgpass
               chmod 600 .pgpass
+              cat .pgpass
               # If there is an PG_VERSION file and at least one line, initdb will not be executed
               echo "$(pg_ctl --version)" 
               echo "$(pg_ctl --version)" > /var/lib/postgresql/data/PG_VERSION
