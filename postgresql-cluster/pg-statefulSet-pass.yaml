@@ -36,7 +36,7 @@ spec:
     storage: 2Gi
   accessModes:
   - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
+  persistentVolumeReclaimPolicy: Delete
   storageClassName: local-storage
   local:
     path: /tmp/disk/vol1
