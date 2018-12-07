@@ -98,9 +98,9 @@ spec:
               [[ `hostname` =~ -([0-9]+)$ ]] || exit 1
               ordinal=${BASH_REMATCH[1]}
               # enable cluster connect
-              cat <<EOF >/mnt/conf.d/my_hba.sh
-              echo 'host replication postgres .pg md5' >> /var/lib/postgresql/data/pg_hba.conf
-              EOF
+              # cat <<EOF >/mnt/conf.d/my_hba.sh
+              # echo 'host replication postgres .pg md5' >> /var/lib/postgresql/data/pg_hba.conf
+              # EOF
               [[ $ordinal -eq 0 ]] && exit 0
               # If there is an PG_VERSION file and at least one line, initdb will not be executed
               echo "$(pg_ctl --version)" > /var/lib/postgresql/data/PG_VERSION
