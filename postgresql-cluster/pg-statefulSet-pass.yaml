@@ -121,6 +121,11 @@ spec:
                 secretKeyRef:
                   name: pg-password
                   key: password
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-password
+                  key: password
           ports:
             - name: pg
               containerPort: 5432
