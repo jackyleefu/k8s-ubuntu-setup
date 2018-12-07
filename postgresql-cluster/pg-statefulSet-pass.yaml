@@ -139,6 +139,7 @@ spec:
               chown -R postgres:postgres /var/lib/postgresql/data
               chmod 700 /var/lib/postgresql/data
               su - postgres
+              echo "pg-$(($ordinal-1)).pg:5432:*:postgres:112233" > ~/.pgpass
               echo "pg-$(($ordinal-1)).pg:5432:*:postgres:112233" > /mnt/pgpass.d/.pgpass
               chmod 600 /mnt/pgpass.d/.pgpass
               # Generate clone data from previous peer.
