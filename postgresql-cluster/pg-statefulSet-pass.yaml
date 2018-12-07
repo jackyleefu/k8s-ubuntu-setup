@@ -8,7 +8,7 @@ volumeBindingMode: WaitForFirstConsumer
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: local-pv
+  name: local-pv-1
 spec:
   capacity:
     storage: 2Gi
@@ -26,6 +26,27 @@ spec:
           operator: In
           values:
           - k8s-node1
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv-2
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: /tmp/disk/vol1
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
           - k8s-node2
 ---
 kind: Secret
