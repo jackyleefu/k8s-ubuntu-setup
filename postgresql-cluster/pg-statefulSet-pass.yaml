@@ -131,7 +131,7 @@ spec:
               containerPort: 5432
           volumeMounts:
             - name: conf
-              mountPath: /docker-entrypoint-initdb.d/conf
+              mountPath: /docker-entrypoint-initdb.d
             - name: data
               subPath: pgdata
               mountPath: /var/lib/postgresql/data
