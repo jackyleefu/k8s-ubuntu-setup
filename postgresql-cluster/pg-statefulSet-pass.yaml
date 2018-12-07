@@ -141,8 +141,6 @@ spec:
               su - postgres
               echo "pg-$(($ordinal-1)).pg:5432:*:postgres:112233" > /mnt/pgpass.d/.pgpass
               chmod 600 /mnt/pgpass.d/.pgpass
-              # If there is an PG_VERSION file and at least one line, initdb will not be executed
-              echo "$(pg_ctl --version)" > /var/lib/postgresql/data/PG_VERSION
               # Generate clone data from previous peer.
               pg_basebackup -h pg-$(($ordinal-1)).pg -U postgres --no-password -D /var/lib/postgresql/data -R
 
