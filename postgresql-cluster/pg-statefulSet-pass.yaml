@@ -185,7 +185,7 @@ spec:
                 - bash
                 - "-c"
                 - |
-                  pg_isready
+                  pg_isready -U postgres
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
@@ -196,7 +196,7 @@ spec:
                 - bash
                 - "-c"
                 - |
-                  psql --no-password -c "SELECT 1"
+                  psql -U postgres --no-password -c "SELECT 1"
             initialDelaySeconds: 5
             periodSeconds: 2
             timeoutSeconds: 1
