@@ -131,7 +131,7 @@ spec:
               EOF
               [[ $ordinal -eq 0 ]] && exit 0
               # Generate clone data from previous peer.
-              pg_basebackup -d "host=pg-$(($ordinal-1)).pg user=postgres password=$POSTGRES_PASSWORD" --no-password -R -D /var/lib/postgresql/data
+              pg_basebackup -w -R -d "host=pg-$(($ordinal-1)).pg user=postgres password=$POSTGRES_PASSWORD" -D /var/lib/postgresql/data
           volumeMounts:
             - name: conf
               mountPath: /mnt/conf.d
@@ -162,7 +162,7 @@ spec:
                 - bash
                 - "-c"
                 - |
-                  pg_isready -d "host=localhost user=postgres password=$POSTGRES_PASSWORD"
+                  pg_isready -q -d "host=localhost user=postgres password=$POSTGRES_PASSWORD"
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
@@ -173,7 +173,7 @@ spec:
                 - bash
                 - "-c"
                 - |
-                  psql -d "host=localhost user=postgres password=$POSTGRES_PASSWORD" --no-password -c "SELECT 1"
+                  psql -w -q -d "host=localhost user=postgres password=$POSTGRES_PASSWORD" -c "SELECT 1"
             initialDelaySeconds: 5
             periodSeconds: 2
             timeoutSeconds: 1
