@@ -108,13 +108,11 @@ spec:
       volumes:
         - name: conf
           emptyDir: {}
-        - name: pgpass
-          emptyDir: {}
       initContainers:
         - name: init-pg
           image: postgres:11.1-alpine
           env:
-            - name: PGPASSWORD
+            - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: pg-password
@@ -132,25 +130,11 @@ spec:
               echo 'host replication postgres 10.244.0.0/16 md5' >> /var/lib/postgresql/data/pg_hba.conf
               EOF
               [[ $ordinal -eq 0 ]] && exit 0
-              if [[ $(ls -A /var/lib/postgresql/data) != "" ]]; then 
-                echo 'PGDATA not empty'
-                exit 1
-              fi
-              chown -R postgres:postgres /var/lib/postgresql/data
-              chmod 700 /var/lib/postgresql/data
-              su - postgres
-              echo "pg-$(($ordinal-1)).pg:5432:*:postgres:112233" > ~/.pgpass
-              chmod 600 ~/.pgpass
-              echo "pg-$(($ordinal-1)).pg:5432:*:postgres:112233" > /mnt/pgpass.d/.pgpass
-              chmod 600 /mnt/pgpass.d/.pgpass
               # Generate clone data from previous peer.
-              pg_basebackup -h pg-$(($ordinal-1)).pg -U postgres --no-password -D /var/lib/postgresql/data -R
-
+              pg_basebackup -d "host=pg-$(($ordinal-1)).pg user=postgres password=$POSTGRES_PASSWORD" --no-password -R -D /var/lib/postgresql/data
           volumeMounts:
             - name: conf
               mountPath: /mnt/conf.d
-            - name: pgpass
-              mountPath: /mnt/pgpass.d
             - name: data
               subPath: pgdata
               mountPath: /var/lib/postgresql/data
@@ -163,19 +147,12 @@ spec:
                 secretKeyRef:
                   name: pg-password
                   key: password
-            - name: PGPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: pg-password
-                  key: password
           ports:
             - name: pg
               containerPort: 5432
           volumeMounts:
             - name: conf
               mountPath: /docker-entrypoint-initdb.d
-            - name: pgpass
-              mountPath: /root
             - name: data
               subPath: pgdata
               mountPath: /var/lib/postgresql/data
@@ -185,7 +162,7 @@ spec:
                 - bash
                 - "-c"
                 - |
-                  pg_isready -U postgres
+                  pg_isready -d "host=localhost user=postgres password=$POSTGRES_PASSWORD"
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
@@ -196,7 +173,7 @@ spec:
                 - bash
                 - "-c"
                 - |
-                  psql -U postgres --no-password -c "SELECT 1"
+                  psql -d "host=localhost user=postgres password=$POSTGRES_PASSWORD" --no-password -c "SELECT 1"
             initialDelaySeconds: 5
             periodSeconds: 2
             timeoutSeconds: 1
