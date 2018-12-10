@@ -260,6 +260,7 @@ spec:
                 host = pg-read-$(($ordinal-1)).pg
               fi
               # Generate clone data from previous peer.
+              echo $host
               pg_basebackup -w -R -d "host=$host user=postgres password=$POSTGRES_PASSWORD" -D /var/lib/postgresql/data
           volumeMounts:
             - name: conf
