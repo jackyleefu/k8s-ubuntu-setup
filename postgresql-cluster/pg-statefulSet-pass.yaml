@@ -253,11 +253,11 @@ spec:
               echo 'host replication postgres 10.244.0.0/16 md5' >> /var/lib/postgresql/data/pg_hba.conf
               EOF
               if [[ $ordinal -eq 0 ]]; then
-                host = pg-write-0.pg
+                host=pg-write-0.pg
                 # Waiting for postgresql master to be ready (accepting connections)
-                until pg_isready -q -h $(host); do sleep 1; done
+                until pg_isready -q -h $host; do sleep 1; done
               else
-                host = pg-read-$(($ordinal-1)).pg
+                host=pg-read-$(($ordinal-1)).pg
               fi
               # Generate clone data from previous peer.
               echo $host
