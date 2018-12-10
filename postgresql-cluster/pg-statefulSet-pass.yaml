@@ -255,7 +255,7 @@ spec:
               if [[ $ordinal -eq 0 ]]; then
                 host = pg-write-0.pg
                 # Waiting for postgresql master to be ready (accepting connections)
-                until pg_isready -q -h $host; do sleep 1; done
+                until pg_isready -q -h $(host); do sleep 1; done
               else
                 host = pg-read-$(($ordinal-1)).pg
               fi
