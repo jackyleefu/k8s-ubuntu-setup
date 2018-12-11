@@ -131,7 +131,7 @@ spec:
             - bash
             - "-c"
             - |
-              set -e
+              set -ex
               # Generate clone data from previous peer.
               [[ `hostname` =~ -([0-9]+)$ ]] || exit 1
               ordinal=${BASH_REMATCH[1]}
@@ -174,7 +174,7 @@ spec:
                 - bash
                 - "-c"
                 - |
-                  pg_isready -q
+                  pg_isready -q -U postgres
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
@@ -246,7 +246,7 @@ spec:
             - bash
             - "-c"
             - |
-              set -e
+              set -ex
               # Generate clone data from previous peer.
               [[ `hostname` =~ -([0-9]+)$ ]] || exit 1
               ordinal=${BASH_REMATCH[1]}
@@ -257,7 +257,7 @@ spec:
               if [[ $ordinal -eq 0 ]]; then
                 host=pg-write-0.pg
                 # Waiting for postgresql master to be ready (accepting connections)
-                until pg_isready -q -h $host; do sleep 1; done
+                until pg_isready -q -h $host -U postgres; do sleep 1; done
               else
                 host=pg-read-$(($ordinal-1)).pg
               fi
@@ -296,7 +296,7 @@ spec:
                 - bash
                 - "-c"
                 - |
-                  pg_isready -q
+                  pg_isready -q -U postgres
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
